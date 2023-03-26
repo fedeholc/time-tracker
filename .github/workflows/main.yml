@@ -9,7 +9,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
+environment:
   VITE_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzamJqemh2cHh1cHZpY2VsYXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc4ODEzMjAsImV4cCI6MTk5MzQ1NzMyMH0.HXSUkFfvbed68_SlKw8Uy-s7xWfp9DWB2ixQPMPcEFo
 
 # Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
@@ -29,7 +29,10 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+      VITE_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzamJqemh2cHh1cHZpY2VsYXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc4ODEzMjAsImV4cCI6MTk5MzQ1NzMyMH0.HXSUkFfvbed68_SlKw8Uy-s7xWfp9DWB2ixQPMPcEFo
+ 
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
