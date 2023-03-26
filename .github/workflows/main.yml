@@ -1,6 +1,9 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
+env:
+  VITE_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzamJqemh2cHh1cHZpY2VsYXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc4ODEzMjAsImV4cCI6MTk5MzQ1NzMyMH0.HXSUkFfvbed68_SlKw8Uy-s7xWfp9DWB2ixQPMPcEFo
+
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -8,9 +11,6 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-env:
-  VITE_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzamJqemh2cHh1cHZpY2VsYXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc4ODEzMjAsImV4cCI6MTk5MzQ1NzMyMH0.HXSUkFfvbed68_SlKw8Uy-s7xWfp9DWB2ixQPMPcEFo
 
 # Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
@@ -30,10 +30,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
+    runs-on: ubuntu-latest
+
     env:
       VITE_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzamJqemh2cHh1cHZpY2VsYXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc4ODEzMjAsImV4cCI6MTk5MzQ1NzMyMH0.HXSUkFfvbed68_SlKw8Uy-s7xWfp9DWB2ixQPMPcEFo
-
-    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -57,3 +57,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+
+        env:
+          VITE_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzamJqemh2cHh1cHZpY2VsYXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc4ODEzMjAsImV4cCI6MTk5MzQ1NzMyMH0.HXSUkFfvbed68_SlKw8Uy-s7xWfp9DWB2ixQPMPcEFo
