@@ -5,7 +5,8 @@ import NuevoRegistro from "./NuevoRegistro";
 import BotonesRegistro from "./BotonesRegistro";
 import RegistrosPrevios from "./RegistrosPrevios";
 import Stats from "./Stats";
-import { FaEye, FaEyeSlash} from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import CardRegistros from "./CardRegistros";
 
 function App() {
   const supabaseUrl = "https://bsjbjzhvpxupvicelazp.supabase.co";
@@ -253,7 +254,7 @@ function App() {
 
         <div className="mt-8 flex flex-col items-center">
           {isRegistrando && (
-            <div className="flex flex-col items-end gap-4 p-6 border rounded-md shadow-sm shadow-gray-300 ">
+            <CardRegistros>
               <DisplayRegistroActual
                 isRegistrando={isRegistrando}
                 isPausado={isPausado}
@@ -265,10 +266,10 @@ function App() {
                 handleRec={handleRec}
                 isRegistrando={isRegistrando}
               ></BotonesRegistro>
-            </div>
+            </CardRegistros>
           )}
           {!isRegistrando && midata && (
-            <div className="flex flex-col items-end gap-4 p-6 border rounded-md shadow-sm shadow-gray-300">
+            <CardRegistros>
               <NuevoRegistro
                 handleRec={handleRec}
                 nr={nuevoRegistro}
@@ -281,7 +282,7 @@ function App() {
                 handleRec={handleRec}
                 isRegistrando={isRegistrando}
               ></BotonesRegistro>
-            </div>
+            </CardRegistros>
           )}
           <br /> <br />
           <div style={{ minWidth: "500px" }}>
@@ -292,7 +293,6 @@ function App() {
             <StatsContainer />
           </div>
         </div>
-
       </div>
 
       <Footer />
