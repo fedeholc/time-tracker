@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import DisplayRegistroActual from "./DisplayRegistroActual";
 import NuevoRegistro from "./NuevoRegistro";
@@ -16,12 +16,6 @@ function App() {
   const supabase = createClient(supabaseUrl, supabaseKey);
   const [midata, setMidata] = useState();
   const [isRegistrando, setIsRegistrando] = useState(false);
-  const [isPausado, setIsPausado] = useState(false);
-  const [tiempoPausado, setTiempoPausado] = useState({
-    inicioPausa: new Date(),
-    finPausa: "",
-    tiempoContado: 0,
-  });
   const [mostrarRegistrosPrevios, setMostrarRegistrosPrevios] = useState(false);
   const [mostrarStats, setMostrarStats] = useState(false);
   const [nuevoRegistro, setNuevoRegistro] = useState({
@@ -60,7 +54,7 @@ function App() {
   function handleRec(event) {
     if (event.target.name === "rec") {
       setIsRegistrando(true);
-      setIsPausado(false);
+
       setNuevoRegistro((prev) => {
         return {
           ...prev,
@@ -69,32 +63,6 @@ function App() {
         };
       });
     }
-
-    // finalmente la opción de pausado no la implementé pero este era el código
-    /*  if (event.target.name === "pause") {
-      if (!isPausado) {
-        setIsPausado(true);
-        setTiempoPausado((prev) => {
-          return {
-            inicioPausa: new Date(),
-            finPausa: "",
-            tiempoContado: prev.tiempoContado,
-          };
-        });
-      } else {
-        setIsPausado(false);
-        setTiempoPausado((prev) => {
-          return {
-            inicioPausa: prev.inicioPausa,
-            finPausa: new Date(),
-            tiempoContado: prev.tiempoContado + (new Date() - prev.inicioPausa),
-          };
-        });
-      }
-    } */
-    //
-
-     
   }
 
   function handleStop(event) {
@@ -119,10 +87,7 @@ function App() {
       }
     }
     guardar();
-    // setIsPausado(false);
-    // setTiempoPausado((prev) => {
-    //   return { ...prev, tiempoContado: 0 };
-    // });
+
     setIsRegistrando(false);
   }
   function handleBorrar(event) {
@@ -238,60 +203,56 @@ function App() {
   }
 
   return (
-    <ThemeProvider>
-      <div>
-        <div
-          style={{ height: "calc(100vh - 100px)" }}
-          className="flex flex-col items-center overflow-auto"
-        >
+    <div>
+      <div
+        style={{ height: "calc(100vh - 100px)" }}
+        className="flex flex-col items-center overflow-auto"
+      >
+        <ThemeProvider>
           <NavBar></NavBar>
-          <div className="mt-8 flex flex-col items-center">
-            {isRegistrando && (
-              <CardRegistros>
-                   <DisplayRegistroActual
-                    isRegistrando={isRegistrando}
-                    isPausado={isPausado}
-                    tiempoPausado={tiempoPausado}
-                    setTiempoPausado={setTiempoPausado}
-                    nuevoRegistro={nuevoRegistro}
-                  ></DisplayRegistroActual>
-                 <BotonesRegistro
-                  handleRec={handleRec}
-                  handleStop={handleStop}
-                  isRegistrando={isRegistrando}
-                ></BotonesRegistro>
-              </CardRegistros>
-            )}
-            {!isRegistrando && midata && (
-              <CardRegistros>
-                <NuevoRegistro
-                  handleRec={handleRec}
-                  nr={nuevoRegistro}
-                  setNR={setNuevoRegistro}
-                  isPausado={isPausado}
-                  isRegistrando={isRegistrando}
-                  midata={midata}
-                ></NuevoRegistro>
-                <BotonesRegistro
-                  handleRec={handleRec}
-                  handleStop={handleStop}
-                  isRegistrando={isRegistrando}
-                ></BotonesRegistro>
-              </CardRegistros>
-            )}
-            <br /> <br />
-            <div style={{ minWidth: "500px" }}>
-              <RegistrosPreviosContainer />
-            </div>
-            <br />
-            <div style={{ minWidth: "500px" }}>
-              <StatsContainer />
-            </div>
+        </ThemeProvider>
+        <div className="mt-8 flex flex-col items-center">
+          {isRegistrando && (
+            <CardRegistros>
+              <DisplayRegistroActual
+                isRegistrando={isRegistrando}
+                nuevoRegistro={nuevoRegistro}
+              ></DisplayRegistroActual>
+              <BotonesRegistro
+                handleRec={handleRec}
+                handleStop={handleStop}
+                isRegistrando={isRegistrando}
+              ></BotonesRegistro>
+            </CardRegistros>
+          )}
+          {!isRegistrando && midata && (
+            <CardRegistros>
+              <NuevoRegistro
+                handleRec={handleRec}
+                nr={nuevoRegistro}
+                setNR={setNuevoRegistro}
+                isRegistrando={isRegistrando}
+                midata={midata}
+              ></NuevoRegistro>
+              <BotonesRegistro
+                handleRec={handleRec}
+                handleStop={handleStop}
+                isRegistrando={isRegistrando}
+              ></BotonesRegistro>
+            </CardRegistros>
+          )}
+          <br /> <br />
+          <div style={{ minWidth: "500px" }}>
+            <RegistrosPreviosContainer />
+          </div>
+          <br />
+          <div style={{ minWidth: "500px" }}>
+            <StatsContainer />
           </div>
         </div>
-        <Footer />
       </div>
-    </ThemeProvider>
+      <Footer />
+    </div>
   );
 }
 

@@ -18,17 +18,6 @@ function DisplayRegistroActual(props) {
     .toISOString()
     .slice(11, 19)}`;
 
-  // para la opción de pausa:
-  /* const textoTiempoPausado = `${new Date(
-    fecha.getTime() - props.tiempoPausado.inicioPausa.getTime()
-  )
-    .toISOString()
-    .slice(11, 19)}`;
-
-  const textoTiempoPausadoTotal = `Pausado total: ${props.tiempoPausado.tiempoContado}`; */
-
-  //fecha.getTime() - props.tiempoPausado.inicioPausa.getTime();
-
   return (
     <div className="">
       <div
@@ -63,15 +52,6 @@ function DisplayRegistroActual(props) {
           ? props.nuevoRegistro.inicio.toLocaleTimeString()
           : "---"}
       </div>
-
-      {/*  para la opción de pausa: */}
-      {/*  <div style={{ fontWeight: "normal", fontSize: "0.8rem" }}>
-        Tiempo pausado: {props.isPausado ? textoTiempoPausado : "---"}
-      </div> */}
-      {/*   <div style={{ fontWeight: "normal", fontSize: "0.8rem" }}>
-       
-        Tiempo pausado total: {textoTiempoPausadoTotal}
-      </div> */}
     </div>
   );
 }

@@ -14,18 +14,6 @@ export default function BotonesRegistro(props) {
         REC
       </button>
 
-      {/*  <button
-        name="pause"
-        onClick={props.handleRec}
-        className={
-          !props.isRegistrando
-            ? "ring-2    rounded-sm ring-green-200  bg-white  text-gray-400   px-2 py-1   "
-            : "ring-2 hover:bg-white  rounded-sm ring-white  bg-green-700  text-white hover:text-green-700 px-2 py-1  hover:ring-green-600 "
-        }
-        disabled={!props.isRegistrando}
-      >
-        {!props.isPausado ? "Pause" : "Continue"}
-      </button> */}
       <button
         name="stop"
         onClick={props.handleStop}
@@ -36,7 +24,6 @@ export default function BotonesRegistro(props) {
         }
         disabled={!props.isRegistrando}
       >
-        {" "}
         Stop
       </button>
     </div>
