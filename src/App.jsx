@@ -11,7 +11,6 @@ import NavBar from "./NavBar";
 import ThemeProvider from "./ThemeProvider";
 
 function App() {
- 
   const supabaseUrl = "https://bsjbjzhvpxupvicelazp.supabase.co";
   const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -123,26 +122,27 @@ function App() {
       });
       setIsRegistrando(false);
     }
-    if (event.currentTarget.dataset.action === "borrar") {
-      async function borrar(elementKey) {
-        try {
-          const { error } = await supabase
-            .from("test1")
-            .delete()
-            .eq("id", event.currentTarget.dataset.key);
+  }
 
-          setMidata((prev) =>
-            prev.filter((e) => parseInt(e.id) !== parseInt(elementKey))
-          );
-        } catch {
-          console.error("Hubo un error: " + error.message);
-        }
+  function handleBorrar(event) {
+    async function borrar(elementKey) {
+      try {
+        const { error } = await supabase
+          .from("test1")
+          .delete()
+          .eq("id", event.currentTarget.dataset.key);
+
+        setMidata((prev) =>
+          prev.filter((e) => parseInt(e.id) !== parseInt(elementKey))
+        );
+      } catch {
+        console.error("Hubo un error: " + error.message);
       }
-
-      // hay que pasar la Key como parametro porque sino con currentTarget
-      //no la puede tomar desde dentro de la arrow function (en cambio con target sí lo hacía)
-      borrar(event.currentTarget.dataset.key);
     }
+
+    // hay que pasar la Key como parametro porque sino con currentTarget
+    //no la puede tomar desde dentro de la arrow function (en cambio con target sí lo hacía)
+    borrar(event.currentTarget.dataset.key);
   }
 
   function RegistrosPreviosContainer() {
@@ -176,7 +176,7 @@ function App() {
           {midata && mostrarRegistrosPrevios && (
             <RegistrosPrevios
               midata={midata}
-              handleRec={handleRec}
+              handleBorrar={handleBorrar}
             ></RegistrosPrevios>
           )}
         </div>
@@ -243,7 +243,7 @@ function App() {
           style={{ height: "calc(100vh - 100px)" }}
           className="flex flex-col items-center overflow-auto"
         >
-            <NavBar></NavBar>
+          <NavBar></NavBar>
           <div className="mt-8 flex flex-col items-center">
             {isRegistrando && (
               <CardRegistros>
