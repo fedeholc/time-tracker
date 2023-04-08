@@ -94,36 +94,37 @@ function App() {
     } */
     //
 
-    if (event.target.name === "stop") {
-      async function guardar() {
-        try {
-          const { data, error } = await supabase
-            .from("test1")
-            .insert({
-              titulo: nuevoRegistro.titulo,
-              inicio: nuevoRegistro.inicio,
-              fin: new Date(),
-              tags: nuevoRegistro.tags,
-              color: nuevoRegistro.color,
-            })
-            .select();
-
-          setMidata((prev) => {
-            return [data[0], ...prev];
-          });
-        } catch {
-          console.error("Hubo un error: " + error.message);
-        }
-      }
-      guardar();
-      setIsPausado(false);
-      setTiempoPausado((prev) => {
-        return { ...prev, tiempoContado: 0 };
-      });
-      setIsRegistrando(false);
-    }
+     
   }
 
+  function handleStop(event) {
+    async function guardar() {
+      try {
+        const { data, error } = await supabase
+          .from("test1")
+          .insert({
+            titulo: nuevoRegistro.titulo,
+            inicio: nuevoRegistro.inicio,
+            fin: new Date(),
+            tags: nuevoRegistro.tags,
+            color: nuevoRegistro.color,
+          })
+          .select();
+
+        setMidata((prev) => {
+          return [data[0], ...prev];
+        });
+      } catch {
+        console.error("Hubo un error: " + error.message);
+      }
+    }
+    guardar();
+    // setIsPausado(false);
+    // setTiempoPausado((prev) => {
+    //   return { ...prev, tiempoContado: 0 };
+    // });
+    setIsRegistrando(false);
+  }
   function handleBorrar(event) {
     async function borrar(elementKey) {
       try {
@@ -247,17 +248,16 @@ function App() {
           <div className="mt-8 flex flex-col items-center">
             {isRegistrando && (
               <CardRegistros>
-                <Fede.Provider value={{ val1: isRegistrando, val2: handleRec }}>
-                  <DisplayRegistroActual
+                   <DisplayRegistroActual
                     isRegistrando={isRegistrando}
                     isPausado={isPausado}
                     tiempoPausado={tiempoPausado}
                     setTiempoPausado={setTiempoPausado}
                     nuevoRegistro={nuevoRegistro}
                   ></DisplayRegistroActual>
-                </Fede.Provider>
-                <BotonesRegistro
+                 <BotonesRegistro
                   handleRec={handleRec}
+                  handleStop={handleStop}
                   isRegistrando={isRegistrando}
                 ></BotonesRegistro>
               </CardRegistros>
@@ -274,6 +274,7 @@ function App() {
                 ></NuevoRegistro>
                 <BotonesRegistro
                   handleRec={handleRec}
+                  handleStop={handleStop}
                   isRegistrando={isRegistrando}
                 ></BotonesRegistro>
               </CardRegistros>

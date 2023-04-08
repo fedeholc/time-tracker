@@ -28,7 +28,7 @@ export default function BotonesRegistro(props) {
       </button> */}
       <button
         name="stop"
-        onClick={props.handleRec}
+        onClick={props.handleStop}
         className={
           !props.isRegistrando
             ? "ring-2    rounded-sm ring-blue-200  bg-white  text-gray-400   px-2 py-1  mr-1 "
