@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { createClient } from "@supabase/supabase-js";
 import DisplayRegistroActual from "./DisplayRegistroActual";
 import NuevoRegistro from "./NuevoRegistro";
@@ -7,6 +7,9 @@ import RegistrosPrevios from "./RegistrosPrevios";
 import Stats from "./Stats";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CardRegistros from "./CardRegistros";
+import NavBar from "./NavBar";
+
+
 
 function App() {
   const supabaseUrl = "https://bsjbjzhvpxupvicelazp.supabase.co";
@@ -69,7 +72,7 @@ function App() {
     }
 
     // finalmente la opción de pausado no la implementé pero este era el código
-    if (event.target.name === "pause") {
+   /*  if (event.target.name === "pause") {
       if (!isPausado) {
         setIsPausado(true);
         setTiempoPausado((prev) => {
@@ -89,7 +92,7 @@ function App() {
           };
         });
       }
-    }
+    } */
     //
 
     if (event.target.name === "stop") {
@@ -194,7 +197,7 @@ function App() {
 
   function StatsContainer() {
     return (
-      <>
+      <> 
         <div className="flex flex-row items-center gap-2 pb-1">
           <div className="text-sm">Estadísticas</div>
           {!mostrarStats && (
@@ -250,11 +253,13 @@ function App() {
         style={{ height: "calc(100vh - 100px)" }}
         className="flex flex-col items-center overflow-auto"
       >
-        <Navbar></Navbar>
-
+            <NavBar></NavBar> 
+ 
         <div className="mt-8 flex flex-col items-center">
           {isRegistrando && (
             <CardRegistros>
+                      <Fede.Provider value={{val1: isRegistrando, val2: handleRec}}>
+
               <DisplayRegistroActual
                 isRegistrando={isRegistrando}
                 isPausado={isPausado}
@@ -262,10 +267,11 @@ function App() {
                 setTiempoPausado={setTiempoPausado}
                 nuevoRegistro={nuevoRegistro}
               ></DisplayRegistroActual>
+              </Fede.Provider>
               <BotonesRegistro
                 handleRec={handleRec}
                 isRegistrando={isRegistrando}
-              ></BotonesRegistro>
+              ></BotonesRegistro> 
             </CardRegistros>
           )}
           {!isRegistrando && midata && (
