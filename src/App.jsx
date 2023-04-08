@@ -8,10 +8,10 @@ import Stats from "./Stats";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CardRegistros from "./CardRegistros";
 import NavBar from "./NavBar";
-
-
+import ThemeProvider from "./ThemeProvider";
 
 function App() {
+ 
   const supabaseUrl = "https://bsjbjzhvpxupvicelazp.supabase.co";
   const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -72,7 +72,7 @@ function App() {
     }
 
     // finalmente la opción de pausado no la implementé pero este era el código
-   /*  if (event.target.name === "pause") {
+    /*  if (event.target.name === "pause") {
       if (!isPausado) {
         setIsPausado(true);
         setTiempoPausado((prev) => {
@@ -145,17 +145,6 @@ function App() {
     }
   }
 
-  function Navbar() {
-    return (
-      <div
-        className="p-2 border-2 mt-1 border-fuchsia-600  shadow-sm shadow-gray-300 text-fuchsia-900 text-lg flex flex-row items-center"
-        style={{ width: "600px" }}
-      >
-        Time Tracker
-      </div>
-    );
-  }
-
   function RegistrosPreviosContainer() {
     return (
       <>
@@ -197,7 +186,7 @@ function App() {
 
   function StatsContainer() {
     return (
-      <> 
+      <>
         <div className="flex flex-row items-center gap-2 pb-1">
           <div className="text-sm">Estadísticas</div>
           {!mostrarStats && (
@@ -248,61 +237,60 @@ function App() {
   }
 
   return (
-    <div>
-      <div
-        style={{ height: "calc(100vh - 100px)" }}
-        className="flex flex-col items-center overflow-auto"
-      >
-            <NavBar></NavBar> 
- 
-        <div className="mt-8 flex flex-col items-center">
-          {isRegistrando && (
-            <CardRegistros>
-                      <Fede.Provider value={{val1: isRegistrando, val2: handleRec}}>
-
-              <DisplayRegistroActual
-                isRegistrando={isRegistrando}
-                isPausado={isPausado}
-                tiempoPausado={tiempoPausado}
-                setTiempoPausado={setTiempoPausado}
-                nuevoRegistro={nuevoRegistro}
-              ></DisplayRegistroActual>
-              </Fede.Provider>
-              <BotonesRegistro
-                handleRec={handleRec}
-                isRegistrando={isRegistrando}
-              ></BotonesRegistro> 
-            </CardRegistros>
-          )}
-          {!isRegistrando && midata && (
-            <CardRegistros>
-              <NuevoRegistro
-                handleRec={handleRec}
-                nr={nuevoRegistro}
-                setNR={setNuevoRegistro}
-                isPausado={isPausado}
-                isRegistrando={isRegistrando}
-                midata={midata}
-              ></NuevoRegistro>
-              <BotonesRegistro
-                handleRec={handleRec}
-                isRegistrando={isRegistrando}
-              ></BotonesRegistro>
-            </CardRegistros>
-          )}
-          <br /> <br />
-          <div style={{ minWidth: "500px" }}>
-            <RegistrosPreviosContainer />
-          </div>
-          <br />
-          <div style={{ minWidth: "500px" }}>
-            <StatsContainer />
+    <ThemeProvider>
+      <div>
+        <div
+          style={{ height: "calc(100vh - 100px)" }}
+          className="flex flex-col items-center overflow-auto"
+        >
+            <NavBar></NavBar>
+          <div className="mt-8 flex flex-col items-center">
+            {isRegistrando && (
+              <CardRegistros>
+                <Fede.Provider value={{ val1: isRegistrando, val2: handleRec }}>
+                  <DisplayRegistroActual
+                    isRegistrando={isRegistrando}
+                    isPausado={isPausado}
+                    tiempoPausado={tiempoPausado}
+                    setTiempoPausado={setTiempoPausado}
+                    nuevoRegistro={nuevoRegistro}
+                  ></DisplayRegistroActual>
+                </Fede.Provider>
+                <BotonesRegistro
+                  handleRec={handleRec}
+                  isRegistrando={isRegistrando}
+                ></BotonesRegistro>
+              </CardRegistros>
+            )}
+            {!isRegistrando && midata && (
+              <CardRegistros>
+                <NuevoRegistro
+                  handleRec={handleRec}
+                  nr={nuevoRegistro}
+                  setNR={setNuevoRegistro}
+                  isPausado={isPausado}
+                  isRegistrando={isRegistrando}
+                  midata={midata}
+                ></NuevoRegistro>
+                <BotonesRegistro
+                  handleRec={handleRec}
+                  isRegistrando={isRegistrando}
+                ></BotonesRegistro>
+              </CardRegistros>
+            )}
+            <br /> <br />
+            <div style={{ minWidth: "500px" }}>
+              <RegistrosPreviosContainer />
+            </div>
+            <br />
+            <div style={{ minWidth: "500px" }}>
+              <StatsContainer />
+            </div>
           </div>
         </div>
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
+    </ThemeProvider>
   );
 }
 
