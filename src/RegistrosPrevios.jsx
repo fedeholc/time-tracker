@@ -1,6 +1,6 @@
 import { FaTrash } from "react-icons/fa";
 
-export default function RegistrosPrevios({ midata, handleRec }) {
+export default function RegistrosPrevios({ midata, handleBorrar }) {
   return (
     <div>
       <div
@@ -39,9 +39,8 @@ export default function RegistrosPrevios({ midata, handleRec }) {
                 </div>
                 <div>
                   <button
-                    data-action="borrar"
                     data-key={e.id}
-                    onClick={handleRec}
+                    onClick={handleBorrar}
                     style={{ color: `${e.color}` }}
                   >
                     <FaTrash className="ml-2" />

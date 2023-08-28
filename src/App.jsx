@@ -5,7 +5,10 @@ import NuevoRegistro from "./NuevoRegistro";
 import BotonesRegistro from "./BotonesRegistro";
 import RegistrosPrevios from "./RegistrosPrevios";
 import Stats from "./Stats";
-import { FaEye, FaEyeSlash} from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import CardRegistros from "./CardRegistros";
+import NavBar from "./NavBar";
+import ThemeProvider from "./ThemeProvider";
 
 function App() {
   const supabaseUrl = "https://bsjbjzhvpxupvicelazp.supabase.co";
@@ -13,12 +16,6 @@ function App() {
   const supabase = createClient(supabaseUrl, supabaseKey);
   const [midata, setMidata] = useState();
   const [isRegistrando, setIsRegistrando] = useState(false);
-  const [isPausado, setIsPausado] = useState(false);
-  const [tiempoPausado, setTiempoPausado] = useState({
-    inicioPausa: new Date(),
-    finPausa: "",
-    tiempoContado: 0,
-  });
   const [mostrarRegistrosPrevios, setMostrarRegistrosPrevios] = useState(false);
   const [mostrarStats, setMostrarStats] = useState(false);
   const [nuevoRegistro, setNuevoRegistro] = useState({
@@ -57,7 +54,7 @@ function App() {
   function handleRec(event) {
     if (event.target.name === "rec") {
       setIsRegistrando(true);
-      setIsPausado(false);
+
       setNuevoRegistro((prev) => {
         return {
           ...prev,
@@ -66,90 +63,52 @@ function App() {
         };
       });
     }
-
-    // finalmente la opción de pausado no la implementé pero este era el código
-    if (event.target.name === "pause") {
-      if (!isPausado) {
-        setIsPausado(true);
-        setTiempoPausado((prev) => {
-          return {
-            inicioPausa: new Date(),
-            finPausa: "",
-            tiempoContado: prev.tiempoContado,
-          };
-        });
-      } else {
-        setIsPausado(false);
-        setTiempoPausado((prev) => {
-          return {
-            inicioPausa: prev.inicioPausa,
-            finPausa: new Date(),
-            tiempoContado: prev.tiempoContado + (new Date() - prev.inicioPausa),
-          };
-        });
-      }
-    }
-    //
-
-    if (event.target.name === "stop") {
-      async function guardar() {
-        try {
-          const { data, error } = await supabase
-            .from("test1")
-            .insert({
-              titulo: nuevoRegistro.titulo,
-              inicio: nuevoRegistro.inicio,
-              fin: new Date(),
-              tags: nuevoRegistro.tags,
-              color: nuevoRegistro.color,
-            })
-            .select();
-
-          setMidata((prev) => {
-            return [data[0], ...prev];
-          });
-        } catch {
-          console.error("Hubo un error: " + error.message);
-        }
-      }
-      guardar();
-      setIsPausado(false);
-      setTiempoPausado((prev) => {
-        return { ...prev, tiempoContado: 0 };
-      });
-      setIsRegistrando(false);
-    }
-    if (event.currentTarget.dataset.action === "borrar") {
-      async function borrar(elementKey) {
-        try {
-          const { error } = await supabase
-            .from("test1")
-            .delete()
-            .eq("id", event.currentTarget.dataset.key);
-
-          setMidata((prev) =>
-            prev.filter((e) => parseInt(e.id) !== parseInt(elementKey))
-          );
-        } catch {
-          console.error("Hubo un error: " + error.message);
-        }
-      }
-
-      // hay que pasar la Key como parametro porque sino con currentTarget
-      //no la puede tomar desde dentro de la arrow function (en cambio con target sí lo hacía)
-      borrar(event.currentTarget.dataset.key);
-    }
   }
 
-  function Navbar() {
-    return (
-      <div
-        className="p-2 border-2 mt-1 border-fuchsia-600  shadow-sm shadow-gray-300 text-fuchsia-900 text-lg flex flex-row items-center"
-        style={{ width: "600px" }}
-      >
-        Time Tracker
-      </div>
-    );
+  function handleStop(event) {
+    async function guardar() {
+      try {
+        const { data, error } = await supabase
+          .from("test1")
+          .insert({
+            titulo: nuevoRegistro.titulo,
+            inicio: nuevoRegistro.inicio,
+            fin: new Date(),
+            tags: nuevoRegistro.tags,
+            color: nuevoRegistro.color,
+          })
+          .select();
+
+        setMidata((prev) => {
+          return [data[0], ...prev];
+        });
+      } catch {
+        console.error("Hubo un error: " + error.message);
+      }
+    }
+    guardar();
+
+    setIsRegistrando(false);
+  }
+  function handleBorrar(event) {
+    async function borrar(elementKey) {
+      try {
+        const { error } = await supabase
+          .from("test1")
+          .delete()
+          .eq("id", event.currentTarget.dataset.key);
+
+        setMidata((prev) =>
+          prev.filter((e) => parseInt(e.id) !== parseInt(elementKey))
+        );
+      } catch {
+        console.error("Hubo un error: " + error.message);
+      }
+    }
+
+    // hay que pasar la Key como parametro porque sino con currentTarget
+    //no la puede tomar desde dentro de la arrow function (en cambio con target sí lo hacía)
+    borrar(event.currentTarget.dataset.key);
   }
 
   function RegistrosPreviosContainer() {
@@ -183,7 +142,7 @@ function App() {
           {midata && mostrarRegistrosPrevios && (
             <RegistrosPrevios
               midata={midata}
-              handleRec={handleRec}
+              handleBorrar={handleBorrar}
             ></RegistrosPrevios>
           )}
         </div>
@@ -249,39 +208,38 @@ function App() {
         style={{ height: "calc(100vh - 100px)" }}
         className="flex flex-col items-center overflow-auto"
       >
-        <Navbar></Navbar>
-
+        <ThemeProvider>
+          <NavBar></NavBar>
+        </ThemeProvider>
         <div className="mt-8 flex flex-col items-center">
           {isRegistrando && (
-            <div className="flex flex-col items-end gap-4 p-6 border rounded-md shadow-sm shadow-gray-300 ">
+            <CardRegistros>
               <DisplayRegistroActual
                 isRegistrando={isRegistrando}
-                isPausado={isPausado}
-                tiempoPausado={tiempoPausado}
-                setTiempoPausado={setTiempoPausado}
                 nuevoRegistro={nuevoRegistro}
               ></DisplayRegistroActual>
               <BotonesRegistro
                 handleRec={handleRec}
+                handleStop={handleStop}
                 isRegistrando={isRegistrando}
               ></BotonesRegistro>
-            </div>
+            </CardRegistros>
           )}
           {!isRegistrando && midata && (
-            <div className="flex flex-col items-end gap-4 p-6 border rounded-md shadow-sm shadow-gray-300">
+            <CardRegistros>
               <NuevoRegistro
                 handleRec={handleRec}
                 nr={nuevoRegistro}
                 setNR={setNuevoRegistro}
-                isPausado={isPausado}
                 isRegistrando={isRegistrando}
                 midata={midata}
               ></NuevoRegistro>
               <BotonesRegistro
                 handleRec={handleRec}
+                handleStop={handleStop}
                 isRegistrando={isRegistrando}
               ></BotonesRegistro>
-            </div>
+            </CardRegistros>
           )}
           <br /> <br />
           <div style={{ minWidth: "500px" }}>
@@ -292,9 +250,7 @@ function App() {
             <StatsContainer />
           </div>
         </div>
-
       </div>
-
       <Footer />
     </div>
   );
